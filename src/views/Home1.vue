@@ -1,13 +1,12 @@
 <template>
   <div class="home">
-    <Test :w="$store.state.data.DISPLAY" v-if="$store.state.data !== null" />
-    <!-- {{ getAPIURL }} -->
+    <Test :coins="coinsSortedBySupplyDESC" v-if="coins !== null" />
   </div>
 </template>
 
 <script>
 import Test from "@/components/Test.vue"; 
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
     name: "Home1",
@@ -21,10 +20,11 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(["getAPIURL"]),
+        ...mapState(['coins']),
+        ...mapGetters(["getAPIURL", "coinsSortedBySupplyDESC"]),
         testComputed() {
-        return "";
-    }
+            return "";
+        }
   }
 }
 </script>
