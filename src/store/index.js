@@ -8,7 +8,8 @@ export default new Vuex.Store({
     api_url: "https://min-api.cryptocompare.com/data/pricemultifull?tsyms=USD&fsyms=",
     data: null,
     default_coins:"",
-    coins: []
+    coins: [],
+    idx: 0
   },
   mutations: {
     SET_DEFAULT_COINS(state, default_coins) {
@@ -29,16 +30,45 @@ export default new Vuex.Store({
       fetch(`${this.state.api_url}${this.state.default_coins}`)
         .then(res => res.json())
         .then(data =>  {
-          let coins = [];
+          let coinsInner = [];
+
+          for (const [coin, details] of Object.entries(data.RAW)) {
+            let o = {};
+            o.COIN = coin;                            
+            o.IDX = this.state.idx++;
+            for (const [index, value] of Object.entries(details)) {
+              
+              o.CURRENCY = index;
+              for (const [i, v] of Object.entries(value)) {
+                // console.log(`${i} : ${v}`);
+                if (i == 'MKTCAP') o.MKTCAP = v;
+                if (i == 'PRICE') o.PRICE = v;
+                if (i == 'VOLUME24HOUR') o.VOLUME24HOUR = v;
+                if (i == 'SUPPLY') o.SUPPLY = v;
+                if (i == 'OPEN24HOUR') o.OPEN24HOUR = v;
+              }
+            }      
+            coinsInner.push(o);          
+          }
+
+          console.log(coinsInner);
+
+          context.commit("SET_COINS", coinsInner);
+        })
+        .catch(e => console.log("Error: " + e));
+    },
+    setDataWithSearchedQuery(context,query) {
+      fetch(`${this.state.api_url},${query}`)
+        .then(res => res.json())
+        .then(data =>  {
+          let coinsInner = [];
 
           for (const [coin, details] of Object.entries(data.RAW)) {
             let o = {};
             o.COIN = coin;
-
+            o.IDX = this.state.idx++;
             for (const [index, value] of Object.entries(details)) {
               o.CURRENCY = index;
-
-
               for (const [i, v] of Object.entries(value)) {
                 // console.log(`${i} : ${v}`);
 
@@ -49,13 +79,14 @@ export default new Vuex.Store({
                 if (i == 'OPEN24HOUR') o.OPEN24HOUR = v;
               }
             }
-
-            coins.push(o);
+            coinsInner.push(o);
           }
 
-          console.log(coins);
+          console.log(coinsInner);
+          // this.state.coins.push(coinsInner);
+          // console.log(this.state.coins);
 
-          context.commit("SET_COINS", coins);
+          context.commit("SET_COINS", coinsInner);
         })
         .catch(e => console.log("Error: " + e));
     },
@@ -63,6 +94,12 @@ export default new Vuex.Store({
   getters: {
     getAPIURL(state) {
       return state.api_url;
+    },
+    coinsSortedByIndexesDESC(state) {
+      return state.coins.sort((c1, c2) => (c1.IDX < c2.IDX) ? 1 : -1);
+    },
+    coinsSortedByIndexesASC(state){
+      return state.coins.sort((c1, c2) => (c1.IDX < c2.IDX) ? -1 : 1);
     },
     coinsSortedBySupplyDESC(state) {
       return state.coins.sort((c1, c2) => (c1.SUPPLY < c2.SUPPLY) ? 1 : -1);

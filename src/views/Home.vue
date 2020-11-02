@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Coins :coins="$store.state.coins" v-if="coins !== null" />
+    <Coins :coins="coins" v-if="coins !== null" />
   </div>
 </template>
 
