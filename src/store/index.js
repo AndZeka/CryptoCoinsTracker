@@ -5,9 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // api_url: "https://min-api.cryptocompare.com/data/pricemultifull?tsyms=USD&fsyms=BTC,ETH,DOGE,USDT,DASH,LTC,ETC,XMR,XRP,TRX",
     api_url: "https://min-api.cryptocompare.com/data/pricemultifull?tsyms=USD&fsyms=",
-    // api_url: "http://api.weatherapi.com/v1/current.json?key=2dce8c59b1994fe9b59153202201910&q=",
     data: null,
     default_coins:"",
     coins: []
@@ -33,21 +31,16 @@ export default new Vuex.Store({
         .then(data =>  {
           let coins = [];
 
-          /**
-           * Coder: Ylber Veliu
-           */
-          //console.log(data.RAW);
           for (const [coin, details] of Object.entries(data.RAW)) {
-            //console.log(`${coin}:`);
             let o = {};
             o.COIN = coin;
 
             for (const [index, value] of Object.entries(details)) {
-              //console.log(`${index}`);
               o.CURRENCY = index;
 
+
               for (const [i, v] of Object.entries(value)) {
-                //console.log(`${i} : ${v}`);
+                // console.log(`${i} : ${v}`);
 
                 if (i == 'MKTCAP') o.MKTCAP = v;
                 if (i == 'PRICE') o.PRICE = v;
@@ -62,28 +55,6 @@ export default new Vuex.Store({
 
           console.log(coins);
 
-          // coins_obj.price = data.DISPLAY.BTC.USD.PRICE;
-          // coins_obj = data.DISPLAY;
-          
-          // for(const coin in coins_obj){
-          //   coins_array[coin]=coins_obj[coin].USD.PRICE;
-          // }
-          
-          // // Descending order
-          // // coins_array.sort(function(a, b){return b-a}); 
-
-
-          // for(let i=0;i<Object.keys(coins_array).length;i++){
-          //   console.log(Object.values(coins_array)[i]);
-          // }
-
-          // //ascending order
-          // let sorted=Object.values(coins_array).sort((a,b)=>b-a);
-
-          // console.log("Sorted");
-          // console.log(sorted);
-
-
           context.commit("SET_COINS", coins);
         })
         .catch(e => console.log("Error: " + e));
@@ -95,6 +66,39 @@ export default new Vuex.Store({
     },
     coinsSortedBySupplyDESC(state) {
       return state.coins.sort((c1, c2) => (c1.SUPPLY < c2.SUPPLY) ? 1 : -1);
+    },
+    coinsSortedBySupplyASC(state){
+      return state.coins.sort((c1, c2) => (c1.SUPPLY < c2.SUPPLY) ? -1 : 1);
+    },
+    coinsSortedByPriceDESC(state) {
+      return state.coins.sort((c1, c2) => (c1.PRICE < c2.PRICE) ? 1 : -1);
+    },
+    coinsSortedByPriceASC(state){
+      return state.coins.sort((c1, c2) => (c1.PRICE < c2.PRICE) ? -1 : 1);
+    },
+    coinsSortedByMarketCapDESC(state) {
+      return state.coins.sort((c1, c2) => (c1.MKTCAP < c2.MKTCAP) ? 1 : -1);
+    },
+    coinsSortedByMarketCapASC(state){
+      return state.coins.sort((c1, c2) => (c1.MKTCAP < c2.MKTCAP) ? -1 : 1);
+    },
+    coinsSortedByCoinNameDESC(state) {
+      return state.coins.sort((c1, c2) => (c1.COIN < c2.COIN) ? 1 : -1);
+    },
+    coinsSortedByCoinNameASC(state){
+      return state.coins.sort((c1, c2) => (c1.COIN < c2.COIN) ? -1 : 1);
+    },
+    coinsSortedByOpenPriceDESC(state) {
+      return state.coins.sort((c1, c2) => (c1.OPEN24HOUR < c2.OPEN24HOUR) ? 1 : -1);
+    },
+    coinsSortedByOpenPriceASC(state){
+      return state.coins.sort((c1, c2) => (c1.OPEN24HOUR < c2.OPEN24HOUR) ? -1 : 1);
+    },
+    coinsSortedByVolumeDESC(state) {
+      return state.coins.sort((c1, c2) => (c1.VOLUME24HOUR < c2.VOLUME24HOUR) ? 1 : -1);
+    },
+    coinsSortedByVolumeASC(state){
+      return state.coins.sort((c1, c2) => (c1.VOLUME24HOUR < c2.VOLUME24HOUR) ? -1 : 1);
     }
   }
 });

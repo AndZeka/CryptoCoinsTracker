@@ -1,15 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from '@/components/Home'
 import News from '@/components/News'
-import Home1 from '@/views/Home1'
+import Home from '@/views/Home'
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
+    path: '/',
+    name: 'Home',
     component: Home
   },
   {
@@ -17,11 +16,6 @@ const routes = [
     name: 'News',
     component: News
   },
-  {
-    path: '/home1',
-    name: 'Home1',
-    component: Home1
-  }
 ];
 
 const router = new VueRouter({

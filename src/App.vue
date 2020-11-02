@@ -5,7 +5,6 @@
         <div class="level-left">
           <router-link to="/" class="level-item button is-black is-outlined is-large">Home</router-link>
           <router-link to="/news" class="level-item button is-black is-outlined is-large">News</router-link>
-          <router-link to="/home1" class="level-item button is-black is-outlined is-large">Home1</router-link>
         </div>
       </nav>
     </section>
@@ -16,7 +15,7 @@
 <script>
 export default {
   created() {
-    localStorage.setItem("default", "BTC,ETH,LTC,ETC,XRP,XMR,XTZ,TRX,BCH,BNB");
+    localStorage.setItem("default", "BTC,ETH,LTC,ETC,XRP,XMR,XTZ,TRX,BCH,BNB,LINK");
   }
 }
 </script>
@@ -26,6 +25,7 @@ export default {
     width: 70%;
   }
   section.section{
-    margin: auto; 
+    margin : 0 !important;
+    padding-left: 0 !important;
   }
 </style>
